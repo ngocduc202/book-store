@@ -4,7 +4,7 @@ import { HiMiniBars3CenterLeft } from 'react-icons/hi2'
 import { IoSearchOutline } from 'react-icons/io5'
 import { HiOutlineHeart, HiOutlineShoppingCart, HiOutlineUser } from 'react-icons/hi2'
 import avatar from "../assets/avatar.png"
-import { navigation } from "../constant/Nav"
+import { navigation } from "../constant/Arr"
 
 
 const Navbar = () => {
