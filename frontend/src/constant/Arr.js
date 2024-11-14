@@ -4,3 +4,5 @@ export const navigation = [
   { name: "Cart Page", href: "/cart" },
   { name: "Check Out", href: "/checkout" },
 ]
+
+export const categories = ["Choose a genre", "Business", "Fiction", "Horror", "Adventure"]
