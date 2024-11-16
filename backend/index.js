@@ -1,15 +1,21 @@
 import express from 'express';
+import cors from 'cors';
 const app = express();
 import dotenv from 'dotenv';
 import connectDB from './src/database/ConnectDB.js';
+import bookRoutes from './src/books/book.route.js';
 dotenv.config();
+
+app.use(express.json());
+app.use(cors({
+  origin: ['http://localhost:5173'],
+  credentials: true
+}))
 
 const port = process.env.PORT || 5000;
 connectDB()
 
-app.use('/' , (req,res) => {
-  res.send("Hello from backend")
-})
+app.use("/api/books" , bookRoutes)
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`)
