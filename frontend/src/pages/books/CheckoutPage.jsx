@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import { toast } from 'react-toastify'
+import { useCreateOrderMutation } from '../../redux/features/orders/ordersApi'
 
 const CheckoutPage = () => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm()
@@ -10,7 +12,10 @@ const CheckoutPage = () => {
   const { cartItems } = useSelector(state => state.cart)
   const totalPrice = cartItems?.reduce((acc, item) => acc + item.newPrice, 0).toFixed(2)
   const { currentUser } = useAuth()
-  const onSubmit = (data) => {
+  const [createOrder, { isLoading, error }] = useCreateOrderMutation()
+  const navigate = useNavigate()
+
+  const onSubmit = async (data) => {
     const newOrder = {
       name: data.name,
       email: currentUser?.email,
@@ -24,6 +29,18 @@ const CheckoutPage = () => {
       productIds: cartItems?.map(item => item?._id),
       totalPrice: totalPrice
     }
+
+    try {
+      await createOrder(newOrder).unwrap()
+      toast.success("Your order has been placed successfully");
+      navigate("/orders")
+    } catch (error) {
+      toast.error("Failed to place order")
+    }
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>
   }
   return (
     <section>
