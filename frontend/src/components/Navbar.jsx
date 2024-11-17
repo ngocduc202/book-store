@@ -6,13 +6,18 @@ import { HiOutlineHeart, HiOutlineShoppingCart, HiOutlineUser } from 'react-icon
 import avatar from "../assets/avatar.png"
 import { navigation } from "../constant/Arr"
 import { useSelector } from 'react-redux'
+import { useAuth } from '../context/AuthContext'
 
 
 const Navbar = () => {
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const { cartItems } = useSelector(state => state.cart)
-  const currentUser = false
+  const { currentUser, logout } = useAuth()
+
+  const handleLogout = () => {
+    logout()
+  }
 
   return (
     <header className='max-w-screen-2xl mx-auto px-4 py-6'>
@@ -34,7 +39,7 @@ const Navbar = () => {
               currentUser ?
                 <>
                   <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-                    <img src={avatar} alt="" className={`size-7 rounded-full ${currentUser ? "ring-2 ring-blue-500" : ""}`} />
+                    <img src={currentUser?.photoURL || avatar} alt="" className={`size-7 rounded-full ${currentUser ? "ring-2 ring-blue-500" : ""}`} />
                   </button>
                   {isDropdownOpen && (
                     <div className='absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-40'>
@@ -46,6 +51,9 @@ const Navbar = () => {
                             </li>
                           ))
                         }
+                        <li>
+                          <button onClick={handleLogout} className='block w-full text-left px-4 py-2 text-sm hover:bg-gray-100'>Logout</button>
+                        </li>
                       </ul>
                     </div>
                   )}

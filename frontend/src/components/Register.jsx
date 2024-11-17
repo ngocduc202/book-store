@@ -2,18 +2,31 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { FaGoogle } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
+import { toast } from 'react-toastify'
 
 const Register = () => {
 
   const [message, setMessage] = useState("")
   const { register, handleSubmit, watch, formState: { errors } } = useForm()
-
-  const onSubmit = (data) => {
-
+  const { registerUser, signInWithGoogle } = useAuth()
+  const onSubmit = async (data) => {
+    try {
+      await registerUser(data.email, data.password);
+      toast.success("User registered successfully");
+    } catch (error) {
+      setMessage("Please provide a valid email and password")
+    }
   }
 
-  const handleGoogleSignIn = () => {
-
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithGoogle()
+      toast.success("Logged in successfully");
+      navigate("/")
+    } catch (error) {
+      toast.error("Failed to sign in with Google")
+    }
   }
 
   return (
